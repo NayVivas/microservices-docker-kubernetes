@@ -7,11 +7,11 @@
 		<artifactId>microservices-docker-kubernetes</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.micro-docker-kubernetes</groupId>
-	<artifactId>msvc-users</artifactId>
+	<groupId>org.microservice-docker-kubernetes</groupId>
+	<artifactId>msvc-courses</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>msvc-users</name>
-	<description>microsercivios-users</description>
+	<name>msvc-courses</name>
+	<description>microsercivios-courses</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2022.0.4</spring-cloud.version>
@@ -41,21 +41,20 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -73,14 +72,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
