@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+  mysql8:
+    container_name: mysql8
+    image: mysql:8
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: MypassMakisan
+      MYSQL_DATABASE: msvc_users
+    volumes:
+      - data-mysql:/var/lib/mysql
+    restart: always
+    networks:
+      - spring
+  postgres15:
+    container_name: postgres15
+    image: postgres:15
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+      POSTGRES_DB: msvc_courses
+    volumes:
+      - data-postgres:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - spring
+  msvc-users:
+    container_name: msvc-users
+    build:
+      context: ./
+      dockerfile: ./msvc-users/Dockerfile
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./msvc-users/.env
+    networks:
+      - spring
+    depends_on:
+      - mysql8
+    restart: always
+  msvc-courses:
+    container_name: msvc-courses
+    build:
+      context: ./
+      dockerfile: ./msvc-courses/Dockerfile
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./msvc-courses/.env
+    networks:
+      - spring
+    depends_on:
+      - postgres15
+      - msvc-users
+    restart: always
+
+volumes:
+  data-mysql:
+    name: data-mysql
+  data-postgres:
+    name: data-postgres
+
+networks:
+  spring:
