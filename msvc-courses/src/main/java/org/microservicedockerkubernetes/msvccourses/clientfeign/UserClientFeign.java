@@ -10,11 +10,11 @@ import java.util.List;
 @FeignClient(name="msvc-users")
 public interface UserClientFeign {
     @GetMapping("/api/user/{id}")
-    public Users getUserId(@PathVariable Long id);
+    public Users getUserId(@PathVariable Long id,  @RequestHeader(value = "Authorization", required = true) String token);
 
     @PostMapping("/api/user/save")
-    public Users create(@RequestBody Users users);
+    public Users create(@RequestBody Users users,  @RequestHeader(value = "Authorization", required = true) String token);
 
     @GetMapping("/api/user/users-courses")
-    public List<Users> getUsersCourses(@RequestParam Iterable<Long> ids);
+    public List<Users> getUsersCourses(@RequestParam Iterable<Long> ids, @RequestHeader(value = "Authorization", required = true) String token);
 }

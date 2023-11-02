@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping
     public Map<String, Object> getUsersAll() {
@@ -54,6 +58,7 @@ public class UserController {
             });
             return ResponseEntity.badRequest().body(errors);
         }
+        users.setPassword(passwordEncoder.encode(users.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(users));
     }
 
@@ -64,7 +69,7 @@ public class UserController {
             Users users1 = userId.get();
             users1.setName(users.getName());
             users1.setEmail(users.getEmail());
-            users1.setPassword(users.getPassword());
+            users1.setPassword(passwordEncoder.encode(users.getPassword()));
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(users1));
         }
         return ResponseEntity.notFound().build();
@@ -88,5 +93,14 @@ public class UserController {
     @GetMapping("/authorized")
     public Map<String, Object> authorized(@RequestParam String code) {
         return Collections.singletonMap("code", code);
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<?> loginByEmail(@RequestParam String email) {
+        Optional<Users> userEmail = userService.getUserEmail(email);
+        if(userEmail.isPresent()) {
+            return ResponseEntity.ok(userEmail.get());
+        }
+        return ResponseEntity.notFound().build();
     }
 }

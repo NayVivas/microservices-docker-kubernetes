@@ -12,9 +12,9 @@ public interface CourseService {
     Course saveCourse(Course course);
     void deleteCourse(Long id);
     void deleteCourseUserId(Long id);
-    Optional<Course> getCourseIdUsers(Long id);
+    Optional<Course> getCourseIdUsers(Long id, String token);
 
-    Optional<Users> assignUser(Users users, Long courseId);
-    Optional<Users> createUser(Users users, Long courseId);
-    Optional<Users> deleteUserCourse(Users users, Long courseId);
+    Optional<Users> assignUser(Users users, Long courseId, String token);
+    Optional<Users> createUser(Users users, Long courseId, String token);
+    Optional<Users> deleteUserCourse(Users users, Long courseId, String token);
 }

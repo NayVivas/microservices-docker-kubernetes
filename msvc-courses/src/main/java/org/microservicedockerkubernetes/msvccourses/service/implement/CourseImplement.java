@@ -51,13 +51,13 @@ public class CourseImplement implements CourseService {
     }
 
     @Override
-    public Optional<Course> getCourseIdUsers(Long id) {
+    public Optional<Course> getCourseIdUsers(Long id, String token) {
         Optional<Course> course = courseRepository.findById(id);
         if(course.isPresent()){
             Course course1 = course.get();
             if(!course1.getCourseUser().isEmpty()){
                 List<Long> ids = course1.getCourseUser().stream().map(CourseUser::getUserId).toList();
-                List<Users> users = userClientFeign.getUsersCourses(ids);
+                List<Users> users = userClientFeign.getUsersCourses(ids, token);
                 course1.setUsers(users);
             }
             return Optional.of(course1);
@@ -67,10 +67,10 @@ public class CourseImplement implements CourseService {
 
     @Override
     @Transactional
-    public Optional<Users> assignUser(Users users, Long courseId) {
+    public Optional<Users> assignUser(Users users, Long courseId, String token) {
        Optional<Course> course = courseRepository.findById(courseId);
         if(course.isPresent()){
-            Users usersMsvc = userClientFeign.getUserId(users.getId());
+            Users usersMsvc = userClientFeign.getUserId(users.getId(), token);
             Course course1 = course.get();
             CourseUser courseUser = new CourseUser();
             courseUser.setUserId(usersMsvc.getId());
@@ -83,10 +83,10 @@ public class CourseImplement implements CourseService {
 
     @Override
     @Transactional
-    public Optional<Users> createUser(Users users, Long courseId) {
+    public Optional<Users> createUser(Users users, Long courseId, String token) {
         Optional<Course> course = courseRepository.findById(courseId);
         if(course.isPresent()){
-            Users usersNewMsvc = userClientFeign.create(users);
+            Users usersNewMsvc = userClientFeign.create(users, token);
             Course course1 = course.get();
             CourseUser courseUser = new CourseUser();
             courseUser.setUserId(usersNewMsvc.getId());
@@ -99,10 +99,10 @@ public class CourseImplement implements CourseService {
 
     @Override
     @Transactional
-    public Optional<Users> deleteUserCourse(Users users, Long courseId) {
+    public Optional<Users> deleteUserCourse(Users users, Long courseId, String token) {
         Optional<Course> course = courseRepository.findById(courseId);
         if(course.isPresent()){
-            Users usersMsvc = userClientFeign.getUserId(users.getId());
+            Users usersMsvc = userClientFeign.getUserId(users.getId(), token);
             Course course1 = course.get();
             CourseUser courseUser = new CourseUser();
             courseUser.setUserId(usersMsvc.getId());

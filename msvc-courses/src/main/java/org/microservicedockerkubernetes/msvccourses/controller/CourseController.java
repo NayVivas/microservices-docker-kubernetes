@@ -26,8 +26,8 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCourseId(@PathVariable Long id){
-        Optional<Course> course = courseService.getCourseIdUsers(id);
+    public ResponseEntity<?> getCourseId(@PathVariable Long id, @RequestHeader(value = "Authorization", required = true) String token){
+        Optional<Course> course = courseService.getCourseIdUsers(id, token);
         if (course.isPresent()) {
             return ResponseEntity.ok(course.get());
         }
@@ -62,10 +62,10 @@ public class CourseController {
     }
 
     @PutMapping("/assign-user/{courseId}")
-    public ResponseEntity<?> assignUser(@RequestBody Users users, @PathVariable Long courseId){
+    public ResponseEntity<?> assignUser(@RequestBody Users users, @PathVariable Long courseId, @RequestHeader(value = "Authorization", required = true) String token){
         Optional<Users> users1;
         try{
-            users1 = courseService.assignUser(users, courseId);
+            users1 = courseService.assignUser(users, courseId, token);
         } catch (FeignException e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -78,10 +78,10 @@ public class CourseController {
     }
 
     @PostMapping("/create-user/{courseId}")
-    public ResponseEntity<?> createUser(@RequestBody Users users, @PathVariable Long courseId){
+    public ResponseEntity<?> createUser(@RequestBody Users users, @PathVariable Long courseId, @RequestHeader(value = "Authorization", required = true) String token){
         Optional<Users> users1;
         try {
-            users1 = courseService.createUser(users, courseId);
+            users1 = courseService.createUser(users, courseId, token);
         } catch (FeignException e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -94,10 +94,10 @@ public class CourseController {
     }
 
     @DeleteMapping("/remove-user/{courseId}")
-    public ResponseEntity<?> removeUser(@RequestBody Users users, @PathVariable Long courseId){
+    public ResponseEntity<?> removeUser(@RequestBody Users users, @PathVariable Long courseId, @RequestHeader(value = "Authorization", required = true) String token){
         Optional<Users> users1;
         try{
-            users1 = courseService.deleteUserCourse(users, courseId);
+            users1 = courseService.deleteUserCourse(users, courseId, token);
         } catch (FeignException e){
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -1,10 +1,11 @@
-/*package com.microdockerkubernetes.msvcusers.security;
+package com.microdockerkubernetes.msvcusers.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
@@ -15,13 +16,18 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    ClientRegistrationRepository clientRegistrationRepository) throws Exception {
         http
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers("/logged-out").permitAll()
-                                .requestMatchers("/authorized").permitAll()
+                                .requestMatchers("/authorized", "/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/", "/{id}").hasAnyAuthority("SCOPE_read", "SCOPE_write")
                                 .requestMatchers(HttpMethod.POST, "/").hasAuthority("SCOPE_write")
                                 .requestMatchers(HttpMethod.PATCH, "/{id}").hasAuthority("SCOPE_write")
@@ -48,4 +54,4 @@ public class SecurityConfig {
 
         return oidcLogoutSuccessHandler;
     }
-}*/
+}
