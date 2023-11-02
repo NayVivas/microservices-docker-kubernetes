@@ -4,6 +4,7 @@ import com.microdockerkubernetes.msvcusers.models.entity.Users;
 import com.microdockerkubernetes.msvcusers.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,9 +19,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private Environment env;
+
     @GetMapping
-    public List<Users> getUsersAll() {
-        return userService.getUsersAll();
+    public Map<String, Object> getUsersAll() {
+        Map<String, Object> body = new HashMap<>();
+        body.put("users", userService.getUsersAll());
+        body.put("podInfo", env.getProperty("MY_POD_NAME") + ": " + env.getProperty("MY_POD_IP"));
+        body.put("Text", env.getProperty("config.text"));
+        return body;
     }
 
     @GetMapping("/{id}")

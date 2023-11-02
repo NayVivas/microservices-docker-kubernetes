@@ -4,9 +4,26 @@ metadata:
   name: msvc-users
 data:
   port: "8001"
-  db_host: mysql8:3306
+  db_host: "mysql8:3306"
   database: msvc_users
-  course_url: msvc-courses:8002
+  course_url: "msvc-courses:8002"
+  application.yaml: |-
+    config:
+      text: Configuration ambient por defect
+    ---
+    spring:
+      config:
+        activate:
+          on-profile: dev
+    config:
+      text: Configuration ambient of dev
+    ---
+    spring:
+          config:
+            activate:
+              on-profile: production
+        config:
+          text: Configuration ambient of production
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -14,6 +31,6 @@ metadata:
   name: msvc-courses
 data:
   port: "8002"
-  db_host: postgres15:5432
+  db_host: "postgres15:5432"
   database: msvc_courses
-  user_url: msvc-users:8001
+  user_url: "msvc-users:8001"
