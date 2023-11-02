@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: msvc-users
+data:
+  port: "8001"
+  db_host: mysql8:3306
+  database: msvc_users
+  course_url: msvc-courses:8002
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: msvc-courses
+data:
+  port: "8002"
+  db_host: postgres15:5432
+  database: msvc_courses
+  user_url: msvc-users:8001

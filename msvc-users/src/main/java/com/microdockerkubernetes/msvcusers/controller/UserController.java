@@ -76,4 +76,9 @@ public class UserController {
     public ResponseEntity<?> getUsersCourses(@RequestParam List<Long> ids){
         return ResponseEntity.ok(userService.getAllUsersIds(ids));
     }
+
+    @GetMapping("/authorized")
+    public Map<String, Object> authorized(@RequestParam String code) {
+        return Collections.singletonMap("code", code);
+    }
 }
